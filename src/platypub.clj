@@ -33,11 +33,11 @@
     (http/get "http://localhost:1337/api/posts" {:as :json :headers {:Authorization (str "Bearer " (get-secret :strapi/api-token))}})
     :body :data))
 
-(defn post->html [post]
-  [:article
-   [:h3 (:Title (:attributes post))]
-   [:h5 (:publishedAt (:attributes post))]
-   [:p (markdown->hiccup (:Content (:attributes post)))]])
+(defn post->html [{:keys [attributes]}]
+  (let [{:keys [Title publishedAt Content]} attributes] [:article
+   [:h3 Title]
+   [:h5 publishedAt]
+   [:p (markdown->hiccup Content)]]))
 
 (defn render! [page hiccup]
   (spit page (str "<!DOCTYPE html>\n" (rum/render-static-markup hiccup))))
