@@ -16,3 +16,4 @@ secrets.edn
 platypub-demo/
 .clj-kondo/
 .lsp/
+index.html
