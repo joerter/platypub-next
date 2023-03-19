@@ -1,0 +1,8 @@
+{:deps {rum/rum                         {:mvn/version "0.12.10"
+                                         :exclusions [cljsjs/react cljsjs/react-dom]}
+         clj-http/clj-http              {:mvn/version "3.12.3"}
+         cheshire/cheshire              {:mvn/version "5.11.0"}
+         markdown-to-hiccup/markdown-to-hiccup {:mvn/version "0.6.2"}}
+ :aliases {:nREPL
+          {:extra-deps
+            {nrepl/nrepl {:mvn/version "1.0.0"}}}}}
