@@ -6,12 +6,16 @@
 
 (comment
   (get-secret :strapi/api-token)
-  (def post (nth (get-posts) 0))
-  (post->html post)
-  (base-html [:h1 "hi"]))
+  (def article (nth (get-articles) 0))
+  (article->html article)
+  (get-config :strapi-base-url))
 
-(defn get-secret [k]
-  (k (edn/read-string (slurp "secrets.edn"))))
+(defn get-edn [file k]
+  (k (edn/read-string (slurp file))))
+
+(def get-config (partial get-edn "config.edn"))
+
+(def get-secret (partial get-edn "secrets.edn"))
 
 (defn markdown->hiccup [markdown]
   (->> markdown
@@ -27,12 +31,12 @@
     [:meta {:charset "utf-8"}]]
    [:body content]])
 
-(defn get-posts []
+(defn get-articles []
   (->
-   (http/get "http://localhost:1337/api/posts" {:as :json :headers {:Authorization (str "Bearer " (get-secret :strapi/api-token))}})
+   (http/get (str (get-config :strapi-base-url) (get-config :strapi-content-type)) {:as :json :headers {:Authorization (str "Bearer " (get-secret :strapi/api-token))}})
    :body :data))
 
-(defn post->html [{:keys [attributes]}]
+(defn article->html [{:keys [attributes]}]
   (let [{:keys [Title publishedAt Content]} attributes] [:article
                                                          [:h3 Title]
                                                          [:h5 publishedAt]
@@ -47,7 +51,7 @@
             [:main
              [:h1 "Test Blog"]
              [:h2 "Recent Posts"]
-             (map post->html (get-posts))])))
+             (map article->html (get-articles))])))
 
 (defn run [opts]
   (index-page))
