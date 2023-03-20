@@ -8,7 +8,7 @@
   (get-secret :strapi/api-token)
   (def article (nth (get-articles) 0))
   (article->html article)
-  (get-config :strapi-base-url))
+  (get-config :strapi/base-url))
 
 (defn get-edn [file k]
   (k (edn/read-string (slurp file))))
@@ -33,7 +33,7 @@
 
 (defn get-articles []
   (->
-   (http/get (str (get-config :strapi-base-url) (get-config :strapi-content-type)) {:as :json :headers {:Authorization (str "Bearer " (get-secret :strapi/api-token))}})
+   (http/get (str (get-config :strapi/base-url) (get-config :strapi/content-type)) {:as :json :headers {:Authorization (str "Bearer " (get-secret :strapi/api-token))}})
    :body :data))
 
 (defn article->html [{:keys [attributes]}]

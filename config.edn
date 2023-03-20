@@ -1,4 +1,4 @@
 {
- :strapi-base-url "http://localhost:1337/api/"
- :strapi-content-type "articles"
+ :strapi/base-url "http://localhost:1337/api/"
+ :strapi/content-type "articles"
  }
